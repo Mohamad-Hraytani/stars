@@ -95,7 +95,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     return null;
                                 },
                                 onSaved: (b) async {
-                                  emailco = b.toString();
+                                  emailco = '${b.toString()}@gmail.com';
                                   SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
                                   prefs.setString('email', b);

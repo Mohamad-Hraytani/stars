@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
+import 'package:flutter_stripe/flutter_stripe.dart' as prefix;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,10 +10,12 @@ import 'package:stars/ShopApp/Card.dart';
 import 'package:stars/ShopApp/ProviderAuth.dart';
 import 'package:stars/ShopApp/ProviderProduct.dart';
 import 'package:stars/ShopApp/decreption.dart';
+
 import 'Fav.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'cusfav.dart';
+import 'package:http/http.dart' as http;
 
 class ProductScreen extends StatefulWidget {
   @override
@@ -21,12 +23,16 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
+  Map<String, dynamic> paymentIntentData;
   bool islood = false;
   var memoryemail;
   TabController tc;
+  TabController tcmaneger;
   int _page = 2;
+  int _page1 = 1;
   var email_variabel;
+  bool flo = false;
   @override
   void initState() {
     super.initState();
@@ -41,6 +47,8 @@ class _ProductScreenState extends State<ProductScreen>
               saveemail();
             }));
     tc = TabController(initialIndex: _page, length: 5, vsync: this);
+
+    tcmaneger = TabController(initialIndex: _page1, length: 3, vsync: this);
   }
 
   @override
@@ -53,6 +61,9 @@ class _ProductScreenState extends State<ProductScreen>
 
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
+  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey1 = GlobalKey();
+  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey3 = GlobalKey();
+  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey4 = GlobalKey();
   @override
   Widget build(BuildContext context) {
     List<product> itemlist1 = Provider.of<ProviderProduct>(context).items;
@@ -71,74 +82,56 @@ class _ProductScreenState extends State<ProductScreen>
               onPressed: () {
                 vu1.longout().then((_) => print(vu1.Auth));
               }),
-          actions: [
-            /*   PopupMenuButton<pop>(onSelected: (pop po) {
-              if (po == pop.additem) {
-                Provider.of<ProviderProduct>(context, listen: false)
-                    .addautoitem()
-                    .then((value) {
-                  setState(() {
-                    islood = false;
-                  });
-                  Provider.of<ProviderProduct>(context, listen: false)
-                      .fetchdata(true)
-                      .then((value) => setState(() {
-                            islood = true;
-                          }));
-                });
-              } else if (po == pop.Logout) {
-                vu1.longout().then((_) => print(vu1.Auth));
-              } else
-                Navigator.push(
-                    context,
-                    PageTransition(
-                      ctx: context,
-                      duration: Duration(seconds: 2),
-                      child: custemfav(),
-                      type: PageTransitionType.theme,
-                      childCurrent: ProductScreen(),
-                      reverseDuration: Duration(seconds: 2),
-                    ));
-            }, itemBuilder: (_) {
-              return [
-                PopupMenuItem<pop>(
-                    value: pop.additem, child: Text(memoryemail)),
-                PopupMenuItem<pop>(value: pop.Logout, child: Text('Logout')),
-                PopupMenuItem<pop>(
-                    value: pop.Painting, child: Text('Painting')),
-              ];
-            }) */
-          ],
+          actions: [],
         ),
         floatingActionButton: email_variabel == 'm.mhr@gmail.com'
-            ? FloatingActionButton(
-                backgroundColor: Colors.purple.withOpacity(0.4),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                        ctx: context,
-                        duration: Duration(seconds: 2),
-                        child: ADDItem(),
-                        type: PageTransitionType.theme,
-                        childCurrent: ProductScreen(),
-                        reverseDuration: Duration(seconds: 2),
-                      ));
+            ? null
+            : FloatingActionButton(
+                backgroundColor: flo
+                    ? Colors.green.shade100
+                    : Colors.purple.withOpacity(0.4),
+                onPressed: () async {
+                  if (flo == true) {
+                    await makePayment();
+                  } else {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                          ctx: context,
+                          duration: Duration(seconds: 2),
+                          child: ADDItem(),
+                          type: PageTransitionType.theme,
+                          childCurrent: ProductScreen(),
+                          reverseDuration: Duration(seconds: 2),
+                        ));
+                  }
                 },
-                child: Icon(Icons.add_outlined),
-              )
-            : null,
+                child: flo
+                    ? Icon(Icons.shopping_cart, size: 30)
+                    : Icon(Icons.add_outlined),
+              ),
         bottomNavigationBar: bottombar(),
-        body: TabBarView(
-          controller: tc,
-          children: [
-            custemfav(),
-            Fav(getMyCard),
-            refresh_and_showItem(itemlist1, true, vu1),
-            Cardd(getMyCard),
-            refresh_and_showItem(itemlist1, false, vu1)
-          ],
-        ),
+        body: email_variabel == 'm.mhr@gmail.com'
+            ? TabBarView(
+                key: _bottomNavigationKey3,
+                controller: tcmaneger,
+                children: [
+                  ADDItem(),
+                  refresh_and_showItem(itemlist1, false, vu1),
+                  custemfav(),
+                ],
+              )
+            : TabBarView(
+                controller: tc,
+                key: _bottomNavigationKey4,
+                children: [
+                  custemfav(),
+                  Fav(getMyCard),
+                  refresh_and_showItem(itemlist1, true, vu1),
+                  Cardd(getMyCard),
+                  refresh_and_showItem(itemlist1, false, vu1)
+                ],
+              ),
       ),
     );
   }
@@ -158,62 +151,91 @@ class _ProductScreenState extends State<ProductScreen>
   }
 
   bottombar() {
-    return CurvedNavigationBar(
-      index: _page,
-      animationDuration: Duration(seconds: 1),
-      backgroundColor: Colors.purple.withOpacity(0.4),
-      key: _bottomNavigationKey,
-      items: <Widget>[
-        Icon(Icons.color_lens, size: 30),
-        Icon(Icons.favorite, size: 30),
-        Icon(Icons.home, size: 30),
-        Consumer<ProviderProduct>(
-          builder: (ctx, value, child) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                value.numitem > 0
-                    ? Stack(alignment: Alignment.center, children: [
-                        Align(
-                          alignment: Alignment(0.5, 0),
-                          child: Icon(
-                            Icons.circle,
-                            color: Colors.purple.withOpacity(0.4),
-                            size: 30,
+    if (email_variabel == 'm.mhr@gmail.com') {
+      return CurvedNavigationBar(
+        index: _page1,
+        animationDuration: Duration(seconds: 1),
+        backgroundColor: Colors.purple.withOpacity(0.4),
+        key: _bottomNavigationKey1,
+        items: <Widget>[
+          Icon(Icons.add_outlined),
+          Icon(Icons.all_inclusive_outlined, size: 30),
+          Icon(Icons.color_lens, size: 30),
+        ],
+        letIndexChange: (index) {
+          IndexChange1(index);
+          return true;
+        },
+        onTap: (index) {
+          IndexChange1(index);
+        },
+      );
+    } else {
+      return CurvedNavigationBar(
+        index: _page,
+        animationDuration: Duration(seconds: 1),
+        backgroundColor: Colors.purple.withOpacity(0.4),
+        key: _bottomNavigationKey,
+        items: <Widget>[
+          Icon(Icons.color_lens, size: 30),
+          Icon(Icons.favorite, size: 30),
+          Icon(Icons.home, size: 30),
+          Consumer<ProviderProduct>(
+            builder: (ctx, value, child) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  value.numitem > 0
+                      ? Stack(alignment: Alignment.center, children: [
+                          Align(
+                            alignment: Alignment(0.5, 0),
+                            child: Icon(
+                              Icons.circle,
+                              color: Colors.purple.withOpacity(0.4),
+                              size: 30,
+                            ),
                           ),
-                        ),
-                        Align(
-                          //  heightFactor: 0,
-                          alignment: Alignment(0.399, -0.5),
-                          child: Text(
-                            '${value.numitem}',
-                            style: TextStyle(fontSize: 18),
+                          Align(
+                            alignment: Alignment(0.399, -0.5),
+                            child: Text(
+                              '${value.numitem}',
+                              style: TextStyle(fontSize: 18),
+                            ),
                           ),
-                        ),
-                      ])
-                    : Container(),
-                Icon(Icons.shopping_cart, size: 30),
-              ],
-            );
-          },
-        ),
-        Icon(Icons.all_inclusive_outlined, size: 30),
-      ],
-      letIndexChange: (index) {
-        IndexChange(index);
-        return true;
-      },
-      onTap: (index) {
-        IndexChange(index);
-      },
-    );
+                        ])
+                      : Container(),
+                  Icon(Icons.shopping_cart, size: 30),
+                ],
+              );
+            },
+          ),
+          Icon(Icons.all_inclusive_outlined, size: 30),
+        ],
+        letIndexChange: (index) {
+          IndexChange(index);
+          return true;
+        },
+        onTap: (index) {
+          IndexChange(index);
+        },
+      );
+    }
+  }
+
+  void IndexChange1(int index) {
+    setState(() {
+      _page1 = index;
+      tcmaneger.index = index;
+    });
   }
 
   void IndexChange(int index) {
     setState(() {
       _page = index;
       tc.index = index;
+      flo = false;
+
       if (index == 2) {
         Provider.of<ProviderProduct>(context, listen: false)
             .fetchdata(true)
@@ -223,13 +245,15 @@ class _ProductScreenState extends State<ProductScreen>
                   });
                 }));
       }
-
+      if (index == 3) {
+        setState(() {
+          flo = true;
+        });
+      }
       if (index == 4) {
         Provider.of<ProviderProduct>(context, listen: false)
             .fetchdata(false)
-            .then((value) => Future.delayed(
-                    // تنفيذ هذا الكود بعد فترة معينة
-                    Duration(milliseconds: 500), () {
+            .then((value) => Future.delayed(Duration(milliseconds: 500), () {
                   setState(() {
                     islood = true;
                   });
@@ -285,7 +309,7 @@ class _ProductScreenState extends State<ProductScreen>
                                 alignment: Alignment.topCenter,
                                 height: 110,
                                 width: double.infinity,
-                                placeholder: AssetImage('lib/img/ballon.png'),
+                                placeholder: AssetImage('lib/img/white.png'),
                                 image: NetworkImage(currentproduct.image,
                                     scale: 1),
                                 fit: BoxFit.cover,
@@ -358,10 +382,10 @@ class _ProductScreenState extends State<ProductScreen>
                   ),
               scrollDirection: Axis.vertical,
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                mainAxisExtent: 200, //ارتفاع كل عنصر
-                maxCrossAxisExtent: 185, // عرض كل عنصر
-                mainAxisSpacing: 15, //البعد بين العناصر بلطول
-                crossAxisSpacing: 15, // البعد بين العناصر بالعضر
+                mainAxisExtent: 200,
+                maxCrossAxisExtent: 185,
+                mainAxisSpacing: 15,
+                crossAxisSpacing: 15,
               ))
           : Center(child: CircularProgressIndicator()),
     );
@@ -374,6 +398,87 @@ class _ProductScreenState extends State<ProductScreen>
         itemlist0.where((element) => element.incard == true).toList();
     Provider.of<ProviderProduct>(context, listen: false)
         .setnumitem(itemcard.length);
+  }
+
+  Future<void> makePayment() async {
+    try {
+      int price = Provider.of<ProviderProduct>(context, listen: false).getsum();
+      paymentIntentData = await createPaymentIntent(price.toString(), 'USD');
+      await prefix.Stripe.instance
+          .initPaymentSheet(
+              paymentSheetParameters: prefix.SetupPaymentSheetParameters(
+                  paymentIntentClientSecret: paymentIntentData['client_secret'],
+                  applePay: true,
+                  googlePay: true,
+                  testEnv: true,
+                  style: ThemeMode.dark,
+                  merchantCountryCode: 'US',
+                  merchantDisplayName: 'ANNIE'))
+          .then((value) {});
+      displayPaymentSheet();
+    } catch (e, s) {
+      print('exception:$e$s');
+    }
+  }
+
+  displayPaymentSheet() async {
+    try {
+      await prefix.Stripe.instance
+          .presentPaymentSheet(
+              parameters: prefix.PresentPaymentSheetParameters(
+        clientSecret: paymentIntentData['client_secret'],
+        confirmPayment: true,
+      ))
+          .then((newValue) {
+        print('payment intent' + paymentIntentData['id'].toString());
+        print('payment intent' + paymentIntentData['client_secret'].toString());
+        print('payment intent' + paymentIntentData['amount'].toString());
+        print('payment intent' + paymentIntentData.toString());
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("paid successfully")));
+
+        paymentIntentData = null;
+      }).onError((error, stackTrace) {
+        print('Exception/DISPLAYPAYMENTSHEET==> $error $stackTrace');
+      });
+    } on prefix.StripeException catch (e) {
+      print('Exception/DISPLAYPAYMENTSHEET==> $e');
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                content: Text("Cancelled "),
+              ));
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': calculateAmount(amount),
+        'currency': currency,
+        'payment_method_types[]': 'card'
+      };
+      print(body);
+      var response = await http.post(
+          Uri.parse('https://api.stripe.com/v1/payment_intents'),
+          body: body,
+          headers: {
+            'Authorization':
+                'Bearer sk_test_51Lue1FCGRVDJvz8aQRgiV6Scjs2J4y9yGVmDBDQiGWXApYhgQ7S6RE0z1cAJPMk0yMCmnDEQuXPZWQrqF9QiM5HN00zoc3qKMi',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          });
+      print('Create Intent reponse ===> ${response.body.toString()}');
+      return jsonDecode(response.body);
+    } catch (err) {
+      print('err charging user: ${err.toString()}');
+    }
+  }
+
+  calculateAmount(String amount) {
+    final a = (int.parse(amount)) * 100;
+    return a.toString();
   }
 }
 

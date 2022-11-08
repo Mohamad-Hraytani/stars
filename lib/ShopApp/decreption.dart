@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:stars/ShopApp/ProviderProduct.dart';
 
-import 'ProductScreen.dart';
-
 class decreption extends StatefulWidget {
   product p;
   decreption(this.p);
@@ -19,22 +17,11 @@ class _decreptionState extends State<decreption> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*  floatingActionButton: FloatingActionButton(
-          child: Icon(
-            Icons.shopping_cart,
-            color: Colors.red,
-          ),
-          onPressed: () =>
-    /*        Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => ProductScreen())) */
-              ), */
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
               backgroundColor: Colors.transparent,
-              expandedHeight: 215.0, // طولا
-              //  floating: false,
-              //    pinned: true, // موجود apparبس نزلت لتحت ببقى ال
+              expandedHeight: 215.0,
               flexibleSpace: FlexibleSpaceBar(
                   background: FittedBox(
                 fit: BoxFit.contain,
@@ -42,10 +29,9 @@ class _decreptionState extends State<decreption> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                            blurRadius: 40, // نصف قطر الظل
+                            blurRadius: 40,
                             color: Colors.pink,
-                            offset: Offset(1, 50) // نقل الظل يمين او يسار
-                            )
+                            offset: Offset(1, 50))
                       ],
                     ),
                     child: Image.network(
@@ -59,7 +45,6 @@ class _decreptionState extends State<decreption> {
             return Container(
               height: 600,
               decoration: BoxDecoration(
-                //  color: Colors.purple.withOpacity(0.4),
                 gradient: LinearGradient(
                   colors: [Colors.purple.withOpacity(0.4), Colors.white],
                 ),
@@ -71,10 +56,9 @@ class _decreptionState extends State<decreption> {
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                              blurRadius: 30, // نصف قطر الظل
+                              blurRadius: 30,
                               color: Colors.deepPurpleAccent.shade100,
-                              offset: Offset(1, 10) // نقل الظل يمين او يسار
-                              )
+                              offset: Offset(1, 10))
                         ],
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
@@ -84,7 +68,6 @@ class _decreptionState extends State<decreption> {
                             Colors.white,
                           ],
                         ),
-                        // color: Colors.green,
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(40),
                             bottomRight: Radius.circular(40))),
@@ -123,10 +106,9 @@ class _decreptionState extends State<decreption> {
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                              blurRadius: 30, // نصف قطر الظل
+                              blurRadius: 30,
                               color: Colors.deepPurpleAccent.shade100,
-                              offset: Offset(1, 10) // نقل الظل يمين او يسار
-                              )
+                              offset: Offset(1, 10))
                         ],
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,

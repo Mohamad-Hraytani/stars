@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:stars/ShopApp/ProviderAuth.dart';
 import 'package:stars/ShopApp/ProviderProduct.dart';
 
-import 'ProductScreen.dart';
-
 class Fav extends StatefulWidget {
   Function getMyCard;
   Fav(this.getMyCard);
@@ -20,14 +18,6 @@ class _FavState extends State<Fav> {
         item.where((element) => element.isfav == true).toList();
     var Auh = Provider.of<ProviderAuth>(context, listen: false);
     return Scaffold(
-      /*  floatingActionButton: FloatingActionButton(
-          child: Icon(
-            Icons.shopping_cart,
-            color: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          }), */
       body: ListView.builder(
           itemCount: itemfav.length,
           itemBuilder: (ctx, i) => ChangeNotifierProvider<product>.value(
@@ -49,7 +39,7 @@ class _FavState extends State<Fav> {
                           child: FadeInImage(
                             alignment: Alignment.topCenter,
                             height: 110,
-                            placeholder: AssetImage('lib/img/ballon.png'),
+                            placeholder: AssetImage('lib/img/white.png'),
                             image: NetworkImage(
                               currentproduct.image,
                               scale: 1,
@@ -135,8 +125,6 @@ class _FavState extends State<Fav> {
                     ],
                   ),
                 ),
-
-//trailing: ,
               ))),
     );
   }

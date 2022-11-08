@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:stars/ShopApp/ProviderAuth.dart';
 import 'package:stars/ShopApp/ProviderProduct.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class ADDItem extends StatefulWidget {
   @override
@@ -20,6 +19,12 @@ class _ADDItemState extends State<ADDItem> {
   var t2 = TextEditingController();
   var t3 = TextEditingController();
   var t4 = TextEditingController();
+  var t5 = TextEditingController();
+
+  void initState() {
+    super.initState();
+    t5.text = 'text.t4';
+  }
 
   final one = FocusNode();
   final two = FocusNode();
@@ -33,8 +38,8 @@ class _ADDItemState extends State<ADDItem> {
   Future GetImagee(ImageSource type) async {
     final t = await pic.getImage(
         source: type,
-        imageQuality: 100, // جودة الصورة
-        maxWidth: double.infinity, //عرض الصورة
+        imageQuality: 100,
+        maxWidth: double.infinity,
         maxHeight: double.infinity);
     setState(() {
       if (t != null) {
@@ -71,11 +76,11 @@ class _ADDItemState extends State<ADDItem> {
                 borderRadius: BorderRadius.circular(40),
                 boxShadow: [
                   BoxShadow(
-                      blurRadius: 5, // نصف قطر الظل
+                      blurRadius: 5,
                       color: Colors.purple.withOpacity(0.4),
                       offset: Offset(1, iscomplet ? 50 : 0)),
                   BoxShadow(
-                      blurRadius: 5, // نصف قطر الظل
+                      blurRadius: 5,
                       color: Colors.purple.withOpacity(0.4),
                       offset: Offset(1, iscomplet ? 100 : 0)),
                 ]),
@@ -159,33 +164,37 @@ class _ADDItemState extends State<ADDItem> {
                             FocusScope.of(context).requestFocus(three);
                           }),
                       TextFormField(
-                        initialValue: "t4.text",
+                        //  initialValue: "t4.text",
+                        controller: t4,
                         enabled: f == null ? true : false,
                         keyboardType: TextInputType.text,
                         style: TextStyle(),
                         decoration: InputDecoration(
-                          suffixIcon: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    GetImagee(ImageSource.camera);
-                                  },
-                                  icon: Icon(
-                                    Icons.camera,
-                                  )),
-                              IconButton(
-                                onPressed: () {
-                                  GetImagee(ImageSource.gallery);
-                                },
-                                icon: Icon(Icons.photo),
-                              )
-                            ],
-                          ),
-                          prefixIcon: Icon(Icons.security),
-                          contentPadding: EdgeInsets.all(5),
-                          labelText: 'Enter Your Url image',
-                        ),
+                            suffixIcon: Container(
+                              width: 96,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        GetImagee(ImageSource.camera);
+                                      },
+                                      icon: Icon(
+                                        Icons.camera,
+                                      )),
+                                  IconButton(
+                                    onPressed: () {
+                                      GetImagee(ImageSource.gallery);
+                                    },
+                                    icon: Icon(Icons.photo),
+                                  )
+                                ],
+                              ),
+                            ),
+                            prefixIcon: Icon(Icons.security),
+                            contentPadding: EdgeInsets.all(5),
+                            labelText: 'Enter your URL or Choose Image',
+                            labelStyle: TextStyle(fontSize: 13)),
                         onSaved: (b) {
                           setState(() {
                             t4.text = b;
@@ -205,7 +214,8 @@ class _ADDItemState extends State<ADDItem> {
                             border: Border.all(color: Colors.black, width: 2),
                             borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(30))),
+                                bottomLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))),
                         child: FlatButton(
                             child: Text('Add Item'),
                             onPressed: () async {

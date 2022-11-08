@@ -37,7 +37,7 @@ class _ExamplePageState extends State<ExamplePage> {
             icon: new Icon(Icons.content_copy),
             tooltip: 'New Painting',
             onPressed: () async {
-              screenshotController
+              await screenshotController
                   .capture(
                 delay: Duration(milliseconds: 10),
               )
@@ -53,6 +53,8 @@ class _ExamplePageState extends State<ExamplePage> {
               }).catchError((onError) {
                 print(onError);
               });
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text("Complet Save")));
 
               setState(() {
                 _finished = false;
@@ -108,41 +110,6 @@ class _ExamplePageState extends State<ExamplePage> {
     setState(() {
       _finished = true;
     });
-    /* Navigator.of(context)
-        .push(new MaterialPageRoute(builder: (BuildContext context) {
-      return new Scaffold(
-        appBar: new AppBar(
-
-          title: const Text('View your image'),
-        ),
-        body: new Container(
-            alignment: Alignment.center,
-            child: new FutureBuilder<Uint8List>(
-              future: picture.toPNG(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.done:
-                    if (snapshot.hasError) {
-                      return new Text('Error: ${snapshot.error}');
-                    } else {
-                      return Image.memory(snapshot.data);
-                    }
-                    break;
-                  default:
-                    return new Container(
-                        child: new FractionallySizedBox(
-                      widthFactor: 0.1,
-                      child: new AspectRatio(
-                          aspectRatio: 1.0,
-                          child: new CircularProgressIndicator()),
-                      alignment: Alignment.center,
-                    ));
-                }
-              },
-            )),
-      );
-    } ));*/
   }
 }
 
@@ -272,15 +239,12 @@ class profil2 extends CustomPainter {
 
     Path path = Path();
 
-    //paint.color = c;
-
     path.lineTo(size.width * 0.30, size.height * 0.35);
 
     path.lineTo(size.width * 0.20, size.height * 0.38);
     path.lineTo(size.width * 0.20, size.height * 0.25);
 
     path.lineTo(size.width * 0.30, size.height * 0.15);
-    //path.lineTo(size.width * 0.25, size.height * 0.25);
 
     path.lineTo(size.width * 0.30, size.height * 0.75);
     path.lineTo(size.width * 0.70, size.height * 0.75);
@@ -297,7 +261,7 @@ class profil2 extends CustomPainter {
 
     path.lineTo(size.width * 0.40, size.height * 0.15);
     path.lineTo(size.width * 0.30, size.height * 0.15);
-    // ترتيب النقط حسب النقطة يلي وصلتلا من النقطة السباقة وميزتا هل تابع انو بعمل امالة ما برسم سيوي
+
     path.lineTo(size.width * 0.30, size.height * 0.35);
 
     path.close();

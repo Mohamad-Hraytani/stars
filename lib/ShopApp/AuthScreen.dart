@@ -1,12 +1,7 @@
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stars/ShopApp/ProviderAuth.dart';
-import 'package:http/http.dart' as http;
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -28,15 +23,6 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     print('object');
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              emailco = 'm.mhr@gmail.com';
-              passco = '123456789';
-              conpassco = '123456789';
-            });
-          },
-        ),
         body: Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -54,17 +40,14 @@ class _AuthScreenState extends State<AuthScreen> {
                   color: Colors.transparent,
                   boxShadow: [
                     BoxShadow(
-                        blurRadius: 1, // نصف قطر الظل
+                        blurRadius: 1,
                         color: Colors.white,
-                        offset:
-                            Offset(1, n == 0 ? 0 : 50) // نقل الظل يمين او يسار
-                        )
+                        offset: Offset(1, n == 0 ? 0 : 50))
                   ],
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20)),
                 ),
-                // انميشن نفس الكونتينر ولكن اي شي يتغير داخله يتم خلال مدة زمنية
                 duration: Duration(seconds: 1.5.toInt()),
                 curve: Curves.linear,
                 height: islog ? 275 : 250,
@@ -72,16 +55,14 @@ class _AuthScreenState extends State<AuthScreen> {
                 alignment: islog ? Alignment(n, n) : Alignment(-b, b),
                 child: Container(
                   padding: EdgeInsets.only(top: 10),
-                  //    height: islog ? 275 : 250,
                   width: 300,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                            blurRadius: 1, // نصف قطر الظل
+                            blurRadius: 1,
                             color: Colors.purple.withOpacity(0.4),
-                            offset: Offset(1, 5) // نقل الظل يمين او يسار
-                            )
+                            offset: Offset(1, 5))
                       ],
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
@@ -119,14 +100,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                       await SharedPreferences.getInstance();
                                   prefs.setString('email', b);
                                 },
-
-                                // initialValue: '',
-                                textInputAction: TextInputAction
-                                    .next, // اشارة الانتر بلكيبورد
+                                textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (_) {
-                                  //الحقل الذي سينتقل اليه عند الضغط على الانتر
-                                  FocusScope.of(context)
-                                      .requestFocus(price); // هو البرايس
+                                  FocusScope.of(context).requestFocus(price);
                                 }),
                             TextFormField(
                                 //    key: ValueKey(passco.text),
@@ -155,9 +131,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 }),
                             islog
                                 ? TextFormField(
-                                    //   key: ValueKey(conpassco.text + '2'),
                                     enabled: islog ? true : false,
-                                    //    controller: conpassco,
                                     style: TextStyle(),
                                     obscureText: true,
                                     decoration: InputDecoration(
@@ -177,43 +151,45 @@ class _AuthScreenState extends State<AuthScreen> {
                                     focusNode: confprice,
                                   )
                                 : Container(),
-
-                            /* border: OutlineInputBorder(
-                         borderSide: BorderSide(color: Colors.transparent)// لون الايطار تبع الفورم
-                         borderRadius: BorderRadius.all(Radius.circular(50))), // لضيع اطار للشكل
-                         enabledBorder: OutlineInputBorder(
-                           borderRadius:BorderRadius.all(Radius.circular(50))),
-                         focusedBorder: OutlineInputBorder(
-                           borderRadius:BorderRadius.all(Radius.circular(50))),
-                         disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50))),
-                         focusColor: Colors.white,
-                         fillColor: Colors.red,
-                         filled: true ),*/
-                            RaisedButton(
-                              onPressed: () {
-                                setState(() {
-                                  islood = false;
-                                });
-                                ke.currentState.validate();
-                                ke.currentState.save();
-                                if (ke.currentState.validate()) {
-                                  islog
-                                      ? Provider.of<ProviderAuth>(context,
-                                              listen: false)
-                                          .signIn(emailco, passco, context)
-                                          .then((value) => setState(() {
-                                                islood = true;
-                                              }))
-                                      : Provider.of<ProviderAuth>(context,
-                                              listen: false)
-                                          .signUp(emailco, passco, context)
-                                          .then((value) => setState(() {
-                                                islood = true;
-                                              }));
-                                }
-                              },
-                              child: islog ? Text('SingIn') : Text('Regester'),
+                            Container(
+                              margin: EdgeInsets.only(top: 5),
+                              decoration: BoxDecoration(
+                                  /*  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black,
+                                        offset: Offset(1, 1))
+                                  ], */
+                                  color: Colors.purple.withOpacity(0.4),
+                                  borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(30),
+                                      topRight: Radius.circular(30))),
+                              child: FlatButton(
+                                onPressed: () {
+                                  setState(() {
+                                    islood = false;
+                                  });
+                                  ke.currentState.validate();
+                                  ke.currentState.save();
+                                  if (ke.currentState.validate()) {
+                                    islog
+                                        ? Provider.of<ProviderAuth>(context,
+                                                listen: false)
+                                            .signIn(emailco, passco, context)
+                                            .then((value) => setState(() {
+                                                  islood = true;
+                                                }))
+                                        : Provider.of<ProviderAuth>(context,
+                                                listen: false)
+                                            .signUp(emailco, passco, context)
+                                            .then((value) => setState(() {
+                                                  islood = true;
+                                                }));
+                                  }
+                                },
+                                child:
+                                    islog ? Text('SingIn') : Text('Regester'),
+                              ),
                             ),
                             islood
                                 ? FlatButton(

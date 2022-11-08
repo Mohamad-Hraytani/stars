@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:stars/ShopApp/ProviderAuth.dart';
 import 'package:stars/ShopApp/ProviderProduct.dart';
 
-import 'ProductScreen.dart';
-
 class Cardd extends StatefulWidget {
   Function getMyCard;
   Cardd(this.getMyCard);
@@ -28,14 +26,6 @@ class _CarddState extends State<Cardd> {
         title: Text(
             '\$${Provider.of<ProviderProduct>(context, listen: false).getsum()}'),
       ),
-      /*  floatingActionButton: FloatingActionButton( // انتبه زررين فوق بعض
-          child: Icon(
-            Icons.style,
-            color: Colors.yellow,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          }), */
       body: ListView.builder(
           itemCount: itemcard.length,
           itemBuilder: (ctx, i) => ChangeNotifierProvider<product>.value(
@@ -57,7 +47,7 @@ class _CarddState extends State<Cardd> {
                           child: FadeInImage(
                             alignment: Alignment.topCenter,
                             height: 110,
-                            placeholder: AssetImage('lib/img/ballon.png'),
+                            placeholder: AssetImage('lib/img/white.png'),
                             image: NetworkImage(
                               currentproduct.image,
                               scale: 1,
@@ -122,8 +112,6 @@ class _CarddState extends State<Cardd> {
                     ],
                   ),
                 ),
-
-//trailing: ,
               ))),
     );
   }

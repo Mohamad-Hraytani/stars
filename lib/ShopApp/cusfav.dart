@@ -78,7 +78,7 @@ class _cucustemfavState extends State<custemfav> {
                               decoration: BoxDecoration(boxShadow: [
                                 BoxShadow(
                                     spreadRadius: 0.5,
-                                    blurRadius: 50, // نصف قطر الظل
+                                    blurRadius: 50,
                                     color: Colors.purple.withOpacity(0.4),
                                     offset: Offset(-10, -20)),
                               ]),
@@ -190,9 +190,7 @@ class _cucustemfavState extends State<custemfav> {
                   : Container(),
               tt1
                   ? Container(
-                      decoration: BoxDecoration(color: Colors.white
-                          //border: Border.all(color: Colors.red, width: 10)
-                          ),
+                      decoration: BoxDecoration(color: Colors.white),
                       height: MediaQuery.of(context).size.height * 0.40,
                       child: CustomPaint(
                         size: Size(double.infinity, double.infinity),
@@ -248,28 +246,44 @@ class _cucustemfavState extends State<custemfav> {
                             : Container(),
                         detils('Text Setting'),
                         coo3 ? showdetils('Text Setting') : Container(),
-                        ElevatedButton(
-                          child: Text(
-                            'Save',
+                        Container(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black, offset: Offset(1, 1))
+                              ],
+                              color: Colors.purple.withOpacity(0.4),
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30))),
+                          child: FlatButton(
+                            child: Text(
+                              'Save',
+                            ),
+                            onPressed: () async {
+                              await screenshotController
+                                  .capture(
+                                delay: Duration(milliseconds: 10),
+                              )
+                                  .then((capturedImage) async {
+                                final result =
+                                    await ImageGallerySaver.saveImage(
+                                  Uint8List.fromList(
+                                    capturedImage,
+                                  ),
+                                  quality: 100,
+                                  name: '${capturedImage.hashCode}',
+                                );
+                                print(result);
+                              }).catchError((onError) {
+                                print(onError);
+                              });
+
+                              await ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Complet Save")));
+                            },
                           ),
-                          onPressed: () async {
-                            screenshotController
-                                .capture(
-                              delay: Duration(milliseconds: 10),
-                            )
-                                .then((capturedImage) async {
-                              final result = await ImageGallerySaver.saveImage(
-                                Uint8List.fromList(
-                                  capturedImage,
-                                ),
-                                quality: 60,
-                                name: '${capturedImage.hashCode}',
-                              );
-                              print(result);
-                            }).catchError((onError) {
-                              print(onError);
-                            });
-                          },
                         ),
                       ],
                     ),
@@ -283,7 +297,6 @@ class _cucustemfavState extends State<custemfav> {
   Widget showdetils(String type) {
     if (type == 'Colors Detils') {
       return Container(
-        //height: 500,
         width: 300,
         child: MaterialPicker(
           pickerColor: c,
@@ -296,7 +309,6 @@ class _cucustemfavState extends State<custemfav> {
       );
     } else if (type == 'More Colors Detils') {
       return Container(
-        //height: 500,
         width: 225,
         child: ColorPicker(
           pickerColor: c,
@@ -315,17 +327,10 @@ class _cucustemfavState extends State<custemfav> {
                 hintText: 'Write Text here',
                 hintStyle: TextStyle(color: Colors.purple),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Colors.transparent), // لون الايطار تبع الفورم
+                    borderSide: BorderSide(color: Colors.transparent),
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(50),
-                        bottomLeft: Radius.circular(50))), // لضيع اطار للشكل
-                /*  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50))), */
-                /*  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50))), */
-                /*    disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50))), */
+                        bottomLeft: Radius.circular(50))),
                 fillColor: Colors.white,
                 filled: true),
             textAlign: TextAlign.center,
@@ -339,7 +344,6 @@ class _cucustemfavState extends State<custemfav> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                //  height: 300,
                 width: 200,
                 child: MaterialPicker(
                   pickerColor: c1,
@@ -452,19 +456,10 @@ class _cucustemfavState extends State<custemfav> {
                         hintText: 'Write Text here',
                         hintStyle: TextStyle(color: Colors.purple),
                         border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors
-                                    .transparent), // لون الايطار تبع الفورم
+                            borderSide: BorderSide(color: Colors.transparent),
                             borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(50),
-                                bottomLeft:
-                                    Radius.circular(50))), // لضيع اطار للشكل
-                        /*  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50))), */
-                        /*  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50))), */
-                        /*    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50))), */
+                                bottomLeft: Radius.circular(50))),
                         fillColor: Colors.white,
                         filled: true),
                     textAlign: TextAlign.center,
@@ -478,7 +473,6 @@ class _cucustemfavState extends State<custemfav> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        //  height: 300,
                         width: 200,
                         child: MaterialPicker(
                           pickerColor: c1,
@@ -637,15 +631,12 @@ class profil1 extends CustomPainter {
 
     Path path = Path();
 
-    //paint.color = c;
-
     path.lineTo(size.width * 0.35, size.height * 0.35);
 
     path.lineTo(size.width * 0.25, size.height * 0.38);
     path.lineTo(size.width * 0.25, size.height * 0.25);
 
     path.lineTo(size.width * 0.35, size.height * 0.15);
-    //path.lineTo(size.width * 0.25, size.height * 0.25);
 
     path.lineTo(size.width * 0.35, size.height * 0.75);
     path.lineTo(size.width * 0.65, size.height * 0.75);
@@ -662,7 +653,6 @@ class profil1 extends CustomPainter {
 
     path.lineTo(size.width * 0.43, size.height * 0.15);
     path.lineTo(size.width * 0.35, size.height * 0.15);
-    // ترتيب النقط حسب النقطة يلي وصلتلا من النقطة السباقة وميزتا هل تابع انو بعمل امالة ما برسم سيوي
     path.lineTo(size.width * 0.35, size.height * 0.35);
 
     path.close();

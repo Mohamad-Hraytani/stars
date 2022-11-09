@@ -26,7 +26,7 @@ class _ProductScreenState extends State<ProductScreen>
     with TickerProviderStateMixin {
   Map<String, dynamic> paymentIntentData;
   bool islood = false;
-  var memoryemail;
+
   TabController tc;
   TabController tcmaneger;
   int _page = 2;
@@ -71,7 +71,7 @@ class _ProductScreenState extends State<ProductScreen>
     return Consumer<ProviderAuth>(
       builder: (context, vu1, _) => Scaffold(
         appBar: AppBar(
-          title: email_variabel == 'm.mhr@gmail.com'
+          title: email_variabel == 'm.mhr'
               ? Text('Hello Maneger')
               : Text('Welcome'),
           backgroundColor: Colors.purple.withOpacity(0.4),
@@ -84,7 +84,7 @@ class _ProductScreenState extends State<ProductScreen>
               }),
           actions: [],
         ),
-        floatingActionButton: email_variabel == 'm.mhr@gmail.com'
+        floatingActionButton: email_variabel == 'm.mhr'
             ? null
             : FloatingActionButton(
                 backgroundColor: flo
@@ -111,7 +111,7 @@ class _ProductScreenState extends State<ProductScreen>
                     : Icon(Icons.add_outlined),
               ),
         bottomNavigationBar: bottombar(),
-        body: email_variabel == 'm.mhr@gmail.com'
+        body: email_variabel == 'm.mhr'
             ? TabBarView(
                 key: _bottomNavigationKey3,
                 controller: tcmaneger,
@@ -140,18 +140,16 @@ class _ProductScreenState extends State<ProductScreen>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     email_variabel = prefs.getString('email');
     setState(() {
-      if (email_variabel == 'm.mhr@gmail.com') {
-        memoryemail = 'addItem';
+      if (email_variabel == 'm.mhr') {
         email_variabel = email_variabel;
       } else {
-        memoryemail = 'showItem';
         email_variabel = email_variabel;
       }
     });
   }
 
   bottombar() {
-    if (email_variabel == 'm.mhr@gmail.com') {
+    if (email_variabel == 'm.mhr') {
       return CurvedNavigationBar(
         index: _page1,
         animationDuration: Duration(seconds: 1),

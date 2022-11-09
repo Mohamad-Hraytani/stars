@@ -82,7 +82,13 @@ class _ExamplePageState extends State<ExamplePage> {
         new IconButton(
             icon: new Icon(Icons.delete),
             tooltip: 'Clear',
-            onPressed: () => _controller.clear),
+            onPressed: () {
+              setState(() {
+                _controller.clear;
+                _finished = false;
+                _controller = _newController();
+              });
+            }),
         new IconButton(
             icon: new Icon(Icons.check),
             onPressed: () => _show(_controller.finish(), context)),

@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ShopApp/AuthScreen.dart';
+import 'ShopApp/Explanepages.dart';
 import 'ShopApp/ProviderProduct.dart';
 import 'ShopApp/ProviderAuth.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +13,15 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences pr1 = await SharedPreferences.getInstance();
+
+  var se = pr1.getBool('se');
+  Widget scre;
+  if (se == null || se == false) {
+    scre = ExplanPage();
+  } else {
+    scre = MyApp();
+  }
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -19,7 +30,12 @@ Future<void> main() async {
       'pk_test_51Lue1FCGRVDJvz8akcSQPGcVMVKfJ6XFKVyQMuNi3vE8hyHSKhsjKIxzGAj0uHbTN0LiDuQ5bKzDeWwlh096pwDt00luIpEaLT';
 
   await Stripe.instance.applySettings();
-  runApp(MyApp());
+
+  runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      debugShowMaterialGrid: false,
+      home: scre));
 }
 
 class MyApp extends StatelessWidget {

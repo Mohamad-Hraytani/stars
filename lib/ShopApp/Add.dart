@@ -19,13 +19,8 @@ class _ADDItemState extends State<ADDItem> {
   var t2 = TextEditingController();
   var t3 = TextEditingController();
   var t4 = TextEditingController();
-  var t5 = TextEditingController();
 
-  void initState() {
-    super.initState();
-    t5.text = 'text.t4';
-  }
-
+  int type_order = 2;
   final one = FocusNode();
   final two = FocusNode();
   final three = FocusNode();
@@ -34,6 +29,16 @@ class _ADDItemState extends State<ADDItem> {
 
   File f;
   var pic = ImagePicker();
+
+  void bankv(int value) {
+    setState(() {
+      type_order = value;
+      if (value == 0) {
+        t3.text = "\$50";
+      } else
+        t3.text = "\$ After rang";
+    });
+  }
 
   Future GetImagee(ImageSource type) async {
     final t = await pic.getImage(
@@ -49,8 +54,43 @@ class _ADDItemState extends State<ADDItem> {
     });
   }
 
+  Widget typeimage() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Column(
+          children: [
+            Container(
+              width: 40,
+              child: Radio(
+                value: 0,
+                groupValue: type_order,
+                onChanged: bankv,
+              ),
+            ),
+            Text('Custom Shirt')
+          ],
+        ),
+        Column(
+          children: [
+            Container(
+              width: 30,
+              child: Radio(
+                value: 1,
+                groupValue: type_order,
+                onChanged: bankv,
+              ),
+            ),
+            Text('Editing or drawing image')
+          ],
+        ),
+      ],
+    );
+  }
+
   var iscomplet = false;
   var isshow = false;
+  product newitem;
   @override
   Widget build(BuildContext context) {
     var Auh = Provider.of<ProviderAuth>(context, listen: false);
@@ -59,12 +99,13 @@ class _ADDItemState extends State<ADDItem> {
           backgroundColor: Colors.purple.withOpacity(0.4),
           centerTitle: true,
           title: Text(
-            'Just manegars can add items',
+            'add items',
             style: TextStyle(fontSize: 15),
           ),
         ),
         body: Center(
           child: AnimatedContainer(
+            height: 365,
             duration: Duration(seconds: 1.5.toInt()),
             curve: Curves.linear,
             decoration: BoxDecoration(
@@ -141,8 +182,11 @@ class _ADDItemState extends State<ADDItem> {
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(two);
                           }),
+                      typeimage(),
                       TextFormField(
                           controller: t3,
+                          enabled:
+                              type_order == 0 || type_order == 1 ? false : true,
                           keyboardType: TextInputType.text,
                           style: TextStyle(),
                           decoration: InputDecoration(
@@ -253,7 +297,7 @@ class _ADDItemState extends State<ADDItem> {
                                           iscomplet = false;
                                         }));
                             }),
-                      )
+                      ),
                     ]))),
           ),
         ));

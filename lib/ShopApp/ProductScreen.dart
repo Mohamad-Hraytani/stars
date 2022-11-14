@@ -84,48 +84,49 @@ class _ProductScreenState extends State<ProductScreen>
               }),
           actions: [],
         ),
-        floatingActionButton: email_variabel == 'm.mhr'
-            ? null
-            : FloatingActionButton(
-                backgroundColor: flo
-                    ? Colors.green.shade100
-                    : Colors.purple.withOpacity(0.4),
-                onPressed: () async {
-                  if (flo == true) {
-                    await makePayment();
-                  } else {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                          ctx: context,
-                          duration: Duration(seconds: 2),
-                          child: ADDItem(),
-                          type: PageTransitionType.theme,
-                          childCurrent: ProductScreen(),
-                          reverseDuration: Duration(seconds: 2),
-                        ));
-                  }
-                },
-                child: flo
-                    ? Icon(Icons.shopping_cart, size: 30)
-                    : Icon(Icons.add_outlined),
-              ),
+        floatingActionButton:
+            email_variabel == 'm.mhr' || tc.index == 0 || tc.index == 0
+                ? null
+                : FloatingActionButton(
+                    backgroundColor: flo
+                        ? Colors.green.shade100
+                        : Colors.purple.withOpacity(0.4),
+                    onPressed: () async {
+                      if (flo == true) {
+                        await makePayment();
+                      } else {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                              ctx: context,
+                              duration: Duration(seconds: 2),
+                              child: ADDItem(),
+                              type: PageTransitionType.theme,
+                              childCurrent: ProductScreen(),
+                              reverseDuration: Duration(seconds: 2),
+                            ));
+                      }
+                    },
+                    child: flo
+                        ? Icon(Icons.shopping_cart, size: 30)
+                        : Icon(Icons.add_outlined),
+                  ),
         bottomNavigationBar: bottombar(),
         body: email_variabel == 'm.mhr'
             ? TabBarView(
                 key: _bottomNavigationKey3,
                 controller: tcmaneger,
                 children: [
-                  ADDItem(),
+                  customfav(),
                   refresh_and_showItem(itemlist1, false, vu1),
-                  custemfav(),
+                  ADDItem(),
                 ],
               )
             : TabBarView(
                 controller: tc,
                 key: _bottomNavigationKey4,
                 children: [
-                  custemfav(),
+                  customfav(),
                   Fav(getMyCard),
                   refresh_and_showItem(itemlist1, true, vu1),
                   Cardd(getMyCard),
@@ -156,9 +157,9 @@ class _ProductScreenState extends State<ProductScreen>
         backgroundColor: Colors.purple.withOpacity(0.4),
         key: _bottomNavigationKey1,
         items: <Widget>[
-          Icon(Icons.add_outlined),
-          Icon(Icons.all_inclusive_outlined, size: 30),
           Icon(Icons.color_lens, size: 30),
+          Icon(Icons.all_inclusive_outlined, size: 30),
+          Icon(Icons.add_outlined),
         ],
         letIndexChange: (index) {
           IndexChange1(index);

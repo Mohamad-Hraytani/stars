@@ -15,12 +15,12 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 import 'Painting.dart';
 
-class custemfav extends StatefulWidget {
+class customfav extends StatefulWidget {
   @override
-  State<custemfav> createState() => _cucustemfavState();
+  State<customfav> createState() => _cucustomfavState();
 }
 
-class _cucustemfavState extends State<custemfav> {
+class _cucustomfavState extends State<customfav> {
   Color c = Colors.white;
   Color c1 = Colors.black;
   var coo1 = false;
@@ -65,7 +65,7 @@ class _cucustemfavState extends State<custemfav> {
         children: [
           Screenshot(
             controller: screenshotController,
-            child: Stack(alignment: Alignment(a, b1), children: [
+            child: Stack(alignment: Alignment(0, b1), children: [
               tt
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +84,7 @@ class _cucustemfavState extends State<custemfav> {
                               ]),
                               child: Column(
                                 children: [
-                                  Text('Custem Shirt'),
+                                  Text('Custom Shirt'),
                                   IconButton(
                                       iconSize: 100,
                                       onPressed: () {
@@ -118,7 +118,7 @@ class _cucustemfavState extends State<custemfav> {
                                               duration: Duration(seconds: 2),
                                               child: ExamplePage(),
                                               type: PageTransitionType.theme,
-                                              childCurrent: custemfav(),
+                                              childCurrent: customfav(),
                                               reverseDuration:
                                                   Duration(seconds: 2),
                                             ));
@@ -248,10 +248,6 @@ class _cucustemfavState extends State<custemfav> {
                         coo3 ? showdetils('Text Setting') : Container(),
                         Container(
                           decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black, offset: Offset(1, 1))
-                              ],
                               color: Colors.purple.withOpacity(0.4),
                               borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(10),

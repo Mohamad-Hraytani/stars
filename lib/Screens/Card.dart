@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stars/Providers/Product.dart';
 import 'package:stars/Providers/ProviderAuth.dart';
 import 'package:stars/Providers/ProviderProduct.dart';
 

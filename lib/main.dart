@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stars/Providers/Product.dart';
 import 'package:stars/Screens/AuthScreen.dart';
 import 'package:stars/Screens/Explanepages.dart';
 import 'package:stars/Screens/ProductScreen.dart';

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:stars/Providers/Product.dart';
 import 'package:stars/Providers/ProviderProduct.dart';
 
 class decreption extends StatefulWidget {

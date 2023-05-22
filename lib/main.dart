@@ -1,13 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'ShopApp/AuthScreen.dart';
-import 'ShopApp/Explanepages.dart';
-import 'ShopApp/ProviderProduct.dart';
-import 'ShopApp/ProviderAuth.dart';
+import 'package:stars/Screens/AuthScreen.dart';
+import 'package:stars/Screens/Explanepages.dart';
+import 'package:stars/Screens/ProductScreen.dart';
+
+import 'Providers/ProviderProduct.dart';
+import 'Providers/ProviderAuth.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'ShopApp/ProductScreen.dart';
+
 
 import 'package:flutter_stripe/flutter_stripe.dart';
 
@@ -16,11 +18,11 @@ Future<void> main() async {
   SharedPreferences pr1 = await SharedPreferences.getInstance();
 
   var se = pr1.getBool('se');
-  Widget scre;
+  Widget begin;
   if (se == null || se == false) {
-    scre = ExplanPage();
+    begin = ExplanPages();
   } else {
-    scre = MyApp();
+    begin = MyApp();
   }
 
   await Firebase.initializeApp(
@@ -35,7 +37,7 @@ Future<void> main() async {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       debugShowMaterialGrid: false,
-      home: scre));
+      home: begin));
 }
 
 class MyApp extends StatelessWidget {
@@ -47,13 +49,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: ProviderAuth()),
         ChangeNotifierProxyProvider<ProviderAuth, ProviderProduct>(
             create: (_) => ProviderProduct(),
-            update: (context, value, pp) => pp
-              ..getdata(value.t, value.usId, pp.items == null ? [] : pp.items)),
+            update: (context, value, object) => object
+              ..getdata(value.t, value.usId, object.items == null ? [] : object.items)),
       ],
       child: Consumer<ProviderAuth>(
         builder: (ctx, value, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
           debugShowMaterialGrid: false,
           home: value.Auth
               ? ProductScreen()
